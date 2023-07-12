@@ -1,15 +1,26 @@
 'use client'
-
-import {collection, getDocs, doc, setDoc, addDoc} from "@firebase/firestore";
+import {addDoc, collection, doc, setDoc} from "@firebase/firestore";
 import {db} from "@/lib/firebase";
 
 
 export default async function Home() {
 
-    const handleSubmit = (event) => {
+    // @ts-ignore
+    const handleSubmit = async (event) => {
         event.preventDefault()
         let form_data = event.target
-        const doc_ref = await addDoc(collection(db, 'work_brief'))
+        const doc_ref = await addDoc(
+            collection(db, 'work_brief'), {
+                name: form_data.name.value,
+                description: form_data.description.value,
+            })
+
+        await setDoc(doc(db, 'work_detail', doc_ref.id), {
+            name: form_data.name.value,
+            description: form_data.description.value,
+        })
+
+        console.log('Document written with ID: ', doc_ref.id)
     }
 
     return (
@@ -17,7 +28,7 @@ export default async function Home() {
             <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                        Name
+                        제목
                     </label>
                     <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -25,17 +36,53 @@ export default async function Home() {
                 </div>
                 <div className="mb-6">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                        Description
+                        간략한 설명
                     </label>
                     <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="description" type="text" name="description" required/>
+                        id="description_brief" type="text" name="description_brief" required/>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                        자세한 설명
+                    </label>
+                    <textarea
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:sh"
+                        id="description_detail" name="description_detail" rows={5} required/>
+                </div>
+                <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                        모집인원(명)
+                    </label>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="num_applicant" type="number" name="num_applicant" required/>
+                </div>
+                <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                        게시기간
+                    </label>
+                    <div className="flex flex-row">
+                        <div className="mr-1 w-2/5">
+                            <input
+                                className="shadow appearance-none border rounded w-full py-2 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="adv_date_to" type="datetime-local" name="adv_date_from" required/>
+                        </div>
+                        <div className="mr-1 text-black font-bold text-center w-1/5">
+                            <h4> ~ </h4>
+                        </div>
+                        <div className="w-2/5">
+                            <input
+                                className="shadow appearance-none border rounded w-full py-2 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="adv_date_from" type="datetime-local" name="adv_date_to" required/>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex items-center justify-between flex-row">
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="submit">
-                        Submit
+                        등록
                     </button>
                 </div>
             </form>

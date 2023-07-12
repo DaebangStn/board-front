@@ -7,6 +7,9 @@
       "enabled": true,
       "port": 9090
     },
-    "singleProjectMode": true
+    "singleProjectMode": true,
+    "auth": {
+      "port": 9099
+    }
   }
 }
