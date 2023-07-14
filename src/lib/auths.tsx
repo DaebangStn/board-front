@@ -32,7 +32,7 @@ function withAuth(Component) {
         }, []);  // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
         if (!loading && !authenticated) {
-            alert("로그인 해주세요")
+            // alert("로그인 해주세요")
             router.push('/signin')
             return
         }
@@ -72,7 +72,7 @@ function withOutAuth(Component) {
         }, []);  // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
         if (!loading && authenticated) {
-            alert("로그아웃 해주세요")
+            // alert("로그아웃 해주세요")
             router.push('/')
             return
         }

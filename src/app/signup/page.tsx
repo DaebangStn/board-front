@@ -4,7 +4,10 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {app, db} from "@/lib/firebase";
 import {withOutAuth} from "@/lib/auths";
 import {doc, setDoc} from "@firebase/firestore";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function SignUp() {
     const auth = getAuth(app)
@@ -12,11 +15,16 @@ function SignUp() {
     const searchParams = useSearchParams()
     const [email, setEmail] = useState(searchParams.get('email') || '')
 
+    useEffect(() => {
+        if (searchParams.has('email')) {
+            toast.info(<div>가입 되지 않은 이메일입니다<br/>회원가입 페이지로 이동합니다</div>)
+        }
+    }, [])
+
     // @ts-ignore
     const handlePassSignup = (event) => {
         event.preventDefault()
         let form_data = event.target
-        setEmail(form_data.email.value)
         const password = form_data.password.value
         const password_confirm = form_data.password_check.value
 
@@ -66,7 +74,9 @@ function SignUp() {
                         </label>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="email" type="text" name="email" value={email} required/>
+                            id="email" type="text" name="email" value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required/>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -118,6 +128,8 @@ function SignUp() {
                     </div>
                 </form>
             </div>
+            <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false} newestOnTop={false}
+                            closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
         </div>
     );
 }

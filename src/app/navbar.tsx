@@ -3,9 +3,11 @@ import {getAuth, onAuthStateChanged, User} from "@firebase/auth";
 import {app, db} from "@/lib/firebase";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
-import {useEffect, useState} from "react";
-import {doc, getDoc} from "@firebase/firestore";
+import React, {useEffect, useState} from "react";
+import {doc, setDoc} from "@firebase/firestore";
 import {fetchUserRole} from "@/lib/auths";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Navbar() {
     const [user, setUser] = useState<User | null>(null)
@@ -15,26 +17,36 @@ export default function Navbar() {
 
     console.log('navbar loaded')
 
-
     useEffect(() => {
         const sub = onAuthStateChanged(auth, (user) => {
             setUser(user);
             if (user) {
                 fetchUserRole(user).then((_role) => {
                     if (_role == null) {
-                        console.log('user role undefined')
                     } else {
                         console.log('user role: ', _role)
                         setRole(_role)
                     }
                 }).catch((error) => {
+                    if (user.metadata.creationTime === user.metadata.lastSignInTime) {
+                        const docRef = doc(db, "users", user.uid);
+                        setDoc(docRef, {
+                            address: '',
+                            role: 'employee'
+                        }).then(() => {
+                        }).catch((error) => {
+                            toast.error("등록 실패: " + error.message)
+                            router.refresh()
+                        })
+                        toast(user.displayName + "님 가입을 환영합니다")
+                    }
                     console.log('fetch user data error: ', error)
                 })
             } else {
                 setRole(null)
             }
         })
-    }, [user, role])
+    }, [])
 
     const signOut = () => {
         const auth = getAuth(app)
@@ -63,6 +75,8 @@ export default function Navbar() {
                     {user.displayName ? <p>{user.displayName}님 안녕하세요!</p> : <p>{user.email}님 안녕하세요!</p>}
                 </div>}
             </div>
+            <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false} newestOnTop={false}
+                            closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
         </div>
     );
 
