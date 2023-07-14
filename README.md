@@ -18,8 +18,6 @@ firebase emulators:export ./firestore
 **REMEMBER:** Run this command before exiting emulator
 
 ## Working
-linking/page.tsx
-- add social login linking to existing account
 
 ## TODO
 
@@ -27,6 +25,7 @@ linking/page.tsx
 - add user profile page
 - add user detailed profile data (phone number, address, etc.)
 - add user delete page
+- add google signup
 - add kakao login
 
 #### Work
@@ -36,3 +35,4 @@ linking/page.tsx
 
 ## Done
 - HOC to protect pages from [un]authenticated users
+- add social login linking to existing account
