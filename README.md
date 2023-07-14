@@ -30,10 +30,10 @@ firebase emulators:export ./firestore
 
 #### Work
 - fix work detail page (detailed work description, deleting and editing work)
-- restrict work creation to admin users
 - add enrollment of work (only admin could see)
 
 ## Done
 - HOC to protect pages from [un]authenticated users
 - add social login linking to existing account
 - add user profile page
+- restrict work creation to admin users

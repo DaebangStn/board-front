@@ -1,9 +1,10 @@
 'use client'
 import {addDoc, collection, doc, setDoc} from "@firebase/firestore";
 import {db} from "@/lib/firebase";
+import {withAdmin} from "@/lib/auths";
 
 
-export default async function Home() {
+function AddWork() {
 
     // @ts-ignore
     const handleSubmit = async (event) => {
@@ -89,3 +90,6 @@ export default async function Home() {
         </div>
     );
 }
+
+const ProtectedAddWork = withAdmin(AddWork)
+export default ProtectedAddWork

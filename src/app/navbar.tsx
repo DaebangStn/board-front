@@ -5,6 +5,7 @@ import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {useEffect, useState} from "react";
 import {doc, getDoc} from "@firebase/firestore";
+import {fetchUserRole} from "@/lib/auths";
 
 export default function Navbar() {
     const [user, setUser] = useState<User | null>(null)
@@ -14,28 +15,17 @@ export default function Navbar() {
 
     console.log('navbar loaded')
 
-    const fetchUserData = async () => {
-        if (user != null) {
-            const docRef = doc(db, "users", user.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setRole(docSnap.data()?.role)
-            } else {
-                console.log("No document for user: " + user?.uid)
-            }
-        }
-    }
 
     useEffect(() => {
         const sub = onAuthStateChanged(auth, (user) => {
             setUser(user);
             if (user) {
-                fetchUserData().then(() => {
-                    if (role == null) {
+                fetchUserRole(user).then((_role) => {
+                    if (_role == null) {
                         console.log('user role undefined')
                     } else {
-                        console.log('user role: ', role)
-                        setRole(role)
+                        console.log('user role: ', _role)
+                        setRole(_role)
                     }
                 }).catch((error) => {
                     console.log('fetch user data error: ', error)
