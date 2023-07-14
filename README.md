@@ -22,8 +22,6 @@ firebase emulators:export ./firestore
 ## TODO
 
 #### User
-- add user detailed profile data (phone number, address, etc.)
-- add user delete page
 - add google signup
 - add kakao signin/signup
 - add user privilege (admin, user, etc.)
@@ -37,3 +35,5 @@ firebase emulators:export ./firestore
 - add social login linking to existing account
 - add user profile page
 - restrict work creation to admin users
+- add user detailed profile data (phone number, address, etc.)
+- add user delete in profile page

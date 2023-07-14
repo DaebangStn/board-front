@@ -1,14 +1,6 @@
 'use client'
 import {withAuth} from "@/lib/auths";
-import {
-    getAuth,
-    PhoneAuthProvider,
-    RecaptchaVerifier,
-    updateEmail,
-    updatePhoneNumber,
-    updateProfile,
-    User
-} from "@firebase/auth";
+import {getAuth, updateEmail, updateProfile, User} from "@firebase/auth";
 import {app, db} from "@/lib/firebase";
 import {useEffect, useState} from "react";
 import {doc, getDoc, setDoc} from "@firebase/firestore";
@@ -85,9 +77,18 @@ function Profile() {
         await router.push('/')
     }
 
+    const handleUserDelete = async () => {
+        user.delete().then(() => {
+            alert("사용자 삭제 완료")
+        }).catch((error) => {
+            alert("사용자 삭제 실패: " + error.message)
+        })
+        router.refresh()
+    }
+
     return (
         <div className="p-8">
-            <h1 className="text-2xl font-bold mb-4">User Profile</h1>
+            <h1 className="text-2xl font-bold mb-4">사용자 정보</h1>
             <div className="space-y-4">
                 <div>
                     <label className="block">이름</label>
@@ -118,10 +119,16 @@ function Profile() {
                            className="mt-1 block w-full text-black" readOnly/>
                 </div>
             </div>
-            <button onClick={handleSave}
-                    className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                저장하기
-            </button>
+            <div className="flex flex-row">
+                <button onClick={handleSave}
+                        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    저장하기
+                </button>
+                <button onClick={handleUserDelete}
+                        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    계정삭제
+                </button>
+            </div>
         </div>
     )
 }
