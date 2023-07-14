@@ -119,13 +119,13 @@ function Profile() {
                            className="mt-1 block w-full text-black" readOnly/>
                 </div>
             </div>
-            <div className="flex flex-row">
+            <div className="flex flex-row space-x-8">
                 <button onClick={handleSave}
                         className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     저장하기
                 </button>
                 <button onClick={handleUserDelete}
-                        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     계정삭제
                 </button>
             </div>
