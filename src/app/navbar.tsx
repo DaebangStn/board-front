@@ -8,9 +8,11 @@ import {doc, getDoc} from "@firebase/firestore";
 
 export default function Navbar() {
     const [user, setUser] = useState<User | null>(null)
-    const [role, setRole] = useState<string | null>("")
+    const [role, setRole] = useState<string | null>(null)
     const auth = getAuth(app)
     const router = useRouter()
+
+    console.log('hello world')
 
     onAuthStateChanged(auth, (user) => {
         setUser(user)
@@ -48,11 +50,14 @@ export default function Navbar() {
         }).catch((error) => {
             console.log("sign out error: ", error)
         })
-        router.refresh()
+
+        setUser(null)
+        setRole(null)
+        router.push('/')
     }
 
     return (
-        <div className="flex flex-row w-full">
+        <div className="flex flex-row w-full py-5">
             <div className="flex flex-row items-center space-x-5 px-5">
                 <Link href={'/'} className="text-3xl">Hey, MR. KIM!</Link>
                 {user == null && <Link href={`/signin`}>로그인</Link>}
@@ -60,9 +65,7 @@ export default function Navbar() {
                 {user != null && <Link href={`/profile`}>마이페이지</Link>}
                 {user != null && <button onClick={signOut}>로그아웃</button>}
                 {role == 'admin' && <Link href={`/work/add`}>일 추가</Link>}
-            </div>
-            <div>
-                {user != null && <div className="p-5">
+                {user != null && <div className="px-10">
                     {user.displayName? <p>{user.displayName}님 안녕하세요!</p>: <p>{user.email}님 안녕하세요!</p>}
                 </div>}
             </div>

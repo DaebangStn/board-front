@@ -33,7 +33,7 @@ function withAuth(Component) {
                 alert("로그인 해주세요")
                 router.push('/');  // Replace with your login route
             }
-        }, [loading, authenticated, router]);
+        }, [loading, router]);
 
         if (loading) {
             return <div>Loading...</div>;
@@ -74,7 +74,7 @@ function withOutAuth(Component) {
                 alert("로그아웃 해주세요")
                 router.push('/');  // Replace with your login route
             }
-        }, [loading, authenticated, router]);
+        }, [loading, router]);
 
         if (loading) {
             return <div>Loading...</div>;
