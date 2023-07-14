@@ -12,35 +12,39 @@ export default function Navbar() {
     const auth = getAuth(app)
     const router = useRouter()
 
-    console.log('hello world')
+    console.log('navbar loaded')
 
-    onAuthStateChanged(auth, (user) => {
-        setUser(user)
-    })
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (user != null) {
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    setRole(docSnap.data()?.role)
-                } else {
-                    console.log("No document for user: " + user?.uid)
-                }
+    const fetchUserData = async () => {
+        if (user != null) {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                setRole(docSnap.data()?.role)
+            } else {
+                console.log("No document for user: " + user?.uid)
             }
         }
+    }
 
-        fetchUserData().then(() => {
-            if (role == null) {
-                console.log('user role undefined')
+    useEffect(() => {
+        const sub = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+            if (user) {
+                fetchUserData().then(() => {
+                    if (role == null) {
+                        console.log('user role undefined')
+                    } else {
+                        console.log('user role: ', role)
+                        setRole(role)
+                    }
+                }).catch((error) => {
+                    console.log('fetch user data error: ', error)
+                })
             } else {
-                console.log('user role: ', role)
+                setRole(null)
             }
-        }).catch((error) => {
-            console.log('user role error: ', error.message)
         })
-    }, [user])
+    }, [user, role])
 
     const signOut = () => {
         const auth = getAuth(app)
@@ -51,8 +55,8 @@ export default function Navbar() {
             console.log("sign out error: ", error)
         })
 
-        setUser(null)
         setRole(null)
+        setUser(null)
         router.push('/')
     }
 
@@ -66,7 +70,7 @@ export default function Navbar() {
                 {user != null && <button onClick={signOut}>로그아웃</button>}
                 {role == 'admin' && <Link href={`/work/add`}>일 추가</Link>}
                 {user != null && <div className="px-10">
-                    {user.displayName? <p>{user.displayName}님 안녕하세요!</p>: <p>{user.email}님 안녕하세요!</p>}
+                    {user.displayName ? <p>{user.displayName}님 안녕하세요!</p> : <p>{user.email}님 안녕하세요!</p>}
                 </div>}
             </div>
         </div>
