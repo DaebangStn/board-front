@@ -24,7 +24,6 @@ firebase emulators:export ./firestore
 #### User
 - add google signup
 - add kakao signin/signup
-- add user privilege (admin, user, etc.)
 
 #### Work
 - fix work detail page (detailed work description, deleting and editing work)
@@ -37,3 +36,4 @@ firebase emulators:export ./firestore
 - restrict work creation to admin users
 - add user detailed profile data (phone number, address, etc.)
 - add user delete in profile page
+- add user privilege (admin, employee, etc...)

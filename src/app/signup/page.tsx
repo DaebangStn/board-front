@@ -1,19 +1,22 @@
 'use client'
-import {createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup} from "@firebase/auth";
-import {useRouter} from "next/navigation";
-import {app} from "@/lib/firebase";
+import {createUserWithEmailAndPassword, getAuth, updateProfile} from "@firebase/auth";
+import {useRouter, useSearchParams} from "next/navigation";
+import {app, db} from "@/lib/firebase";
 import {withOutAuth} from "@/lib/auths";
-import exp from "constants";
+import {doc, setDoc} from "@firebase/firestore";
+import {useState} from "react";
 
 function SignUp() {
     const auth = getAuth(app)
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const [email, setEmail] = useState(searchParams.get('email') || '')
 
     // @ts-ignore
     const handlePassSignup = (event) => {
         event.preventDefault()
         let form_data = event.target
-        const email = form_data.email.value
+        setEmail(form_data.email.value)
         const password = form_data.password.value
         const password_confirm = form_data.password_check.value
 
@@ -25,13 +28,28 @@ function SignUp() {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
-                console.log("user: ", user)
+                const docRef = doc(db, "users", user.uid);
+
+                setDoc(docRef, {
+                    address: form_data.address.value,
+                    role: 'employee'
+                }).then(() => {
+                }).catch((error) => {
+                    alert("회원가입 실패: " + error.message)
+                    router.refresh()
+                })
+
+                updateProfile(user, {
+                    displayName: form_data.displayName.value,
+                    photoURL: null
+                }).then(() => {
+                }).catch((error) => {
+                    alert("회원가입 실패: " + error.message)
+                })
+
                 router.push('/signup/linking')
             }).catch((error) => {
-            const errorCode = error.code
-            const errorMessage = error.message
-            console.log("errorCode: ", errorCode, "errorMessage: ", errorMessage)
-            alert(errorMessage)
+            alert("회원가입 실패: " + error.message)
         })
     }
 
@@ -48,7 +66,7 @@ function SignUp() {
                         </label>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="email" type="text" name="email" required/>
+                            id="email" type="text" name="email" value={email} required/>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -65,6 +83,30 @@ function SignUp() {
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="password_check" type="password" name="password_check" required/>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            이름 *(옵션)
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="displayName" type="text" name="displayName"/>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            휴대전화 *(옵션)
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="phoneNumber" type="text" name="phoneNumber"/>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            주소 *(옵션)
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="address" type="text" name="address"/>
                     </div>
                     <div className="flex flex-row">
                         <div className="mr-5">
