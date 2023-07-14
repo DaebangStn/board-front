@@ -5,7 +5,7 @@ import {app} from "@/lib/firebase";
 import {withOutAuth} from "@/lib/auths";
 import React from "react";
 
-const SignIn: React.VFC = () =>  {
+function SignIn(){
     const auth = getAuth(app)
     const router = useRouter()
 

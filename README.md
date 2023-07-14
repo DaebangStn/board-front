@@ -22,11 +22,11 @@ firebase emulators:export ./firestore
 ## TODO
 
 #### User
-- add user profile page
 - add user detailed profile data (phone number, address, etc.)
 - add user delete page
 - add google signup
-- add kakao login
+- add kakao signin/signup
+- add user privilege (admin, user, etc.)
 
 #### Work
 - fix work detail page (detailed work description, deleting and editing work)
@@ -36,3 +36,4 @@ firebase emulators:export ./firestore
 ## Done
 - HOC to protect pages from [un]authenticated users
 - add social login linking to existing account
+- add user profile page
