@@ -2,8 +2,10 @@
 import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, getAuth} from "@firebase/auth";
 import {useRouter} from "next/navigation";
 import {app} from "@/lib/firebase";
+import {withOutAuth} from "@/lib/auths";
+import React from "react";
 
-export default function Home() {
+const SignIn: React.VFC = () =>  {
     const auth = getAuth(app)
     const router = useRouter()
 
@@ -90,3 +92,6 @@ export default function Home() {
         </div>
     );
 }
+
+const ProtectedSignIn = withOutAuth(SignIn);
+export default ProtectedSignIn;

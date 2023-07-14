@@ -2,15 +2,12 @@
 import {createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup} from "@firebase/auth";
 import {useRouter} from "next/navigation";
 import {app} from "@/lib/firebase";
+import {withOutAuth} from "@/lib/auths";
+import exp from "constants";
 
-export default function Home() {
+function SignUp() {
     const auth = getAuth(app)
     const router = useRouter()
-
-    if (auth.currentUser != null) {
-        console.log("Already authenticated: ", auth.currentUser)
-        router.push('/')
-    }
 
     // @ts-ignore
     const handlePassSignup = (event) => {
@@ -18,7 +15,7 @@ export default function Home() {
         let form_data = event.target
         const email = form_data.email.value
         const password = form_data.password.value
-        const password_confirm = form_data.password_confirm.value
+        const password_confirm = form_data.password_check.value
 
         if (password !== password_confirm) {
             alert("비밀번호가 일치하지 않습니다.")
@@ -29,27 +26,12 @@ export default function Home() {
             .then((userCredential) => {
                 const user = userCredential.user
                 console.log("user: ", user)
-                router.push('/')
+                router.push('/signup/linking')
             }).catch((error) => {
             const errorCode = error.code
             const errorMessage = error.message
             console.log("errorCode: ", errorCode, "errorMessage: ", errorMessage)
-        })
-    }
-
-    const handleGoogleLogin = async () => {
-        signInWithPopup(auth, new GoogleAuthProvider())
-            .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result)
-                const token = credential?.accessToken
-                const user = result.user
-                console.log("user: ", user)
-                console.log("token: ", token)
-            }).catch((error) => {
-            const errorCode = error.code
-            const errorMessage = error.message
-            const email = error.email
-            console.log("errorCode: ", errorCode, "errorMessage: ", errorMessage, "email: ", email)
+            alert(errorMessage)
         })
     }
 
@@ -97,3 +79,8 @@ export default function Home() {
         </div>
     );
 }
+
+const ProtectedSignUp = withOutAuth(SignUp)
+export default ProtectedSignUp
+
+
