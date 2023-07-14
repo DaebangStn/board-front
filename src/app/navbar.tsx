@@ -1,18 +1,44 @@
 'use client'
 import {getAuth, onAuthStateChanged, User} from "@firebase/auth";
-import {app} from "@/lib/firebase";
+import {app, db} from "@/lib/firebase";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {doc, getDoc} from "@firebase/firestore";
 
 export default function Navbar() {
-    const [user, setUser] = useState<User|null>(null)
+    const [user, setUser] = useState<User | null>(null)
+    const [role, setRole] = useState<string | null>("")
     const auth = getAuth(app)
     const router = useRouter()
 
     onAuthStateChanged(auth, (user) => {
         setUser(user)
     })
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (user != null) {
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    setRole(docSnap.data()?.role)
+                } else {
+                    console.log("No document for user: " + user?.uid)
+                }
+            }
+        }
+
+        fetchUserData().then(() => {
+            if (role == null) {
+                console.log('user role undefined')
+            } else {
+                console.log('user role: ', role)
+            }
+        }).catch((error) => {
+            console.log('user role error: ', error.message)
+        })
+    }, [user])
 
     const signOut = () => {
         const auth = getAuth(app)
@@ -26,17 +52,18 @@ export default function Navbar() {
     }
 
     return (
-        <div className="flex flex-row">
-            <div className="flex flex-row items-center space-x-5 p-10">
+        <div className="flex flex-row w-full">
+            <div className="flex flex-row items-center space-x-5 px-5">
                 <Link href={'/'} className="text-3xl">Hey, MR. KIM!</Link>
                 {user == null && <Link href={`/signin`}>로그인</Link>}
                 {user == null && <Link href={`/signup`}>회원가입</Link>}
+                {user != null && <Link href={`/profile`}>마이페이지</Link>}
                 {user != null && <button onClick={signOut}>로그아웃</button>}
-                <Link href={`/work/add`}>일 추가</Link>
+                {role == 'admin' && <Link href={`/work/add`}>일 추가</Link>}
             </div>
             <div>
-                {user != null && <div className="flex flex-row p-10">
-                    <p>{user.email}님 안녕하세요!</p>
+                {user != null && <div className="p-5">
+                    {user.displayName? <p>{user.displayName}님 안녕하세요!</p>: <p>{user.email}님 안녕하세요!</p>}
                 </div>}
             </div>
         </div>

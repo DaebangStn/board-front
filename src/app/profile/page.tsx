@@ -54,7 +54,8 @@ function Profile() {
     const handleSave = async () => {
         const docRef = doc(db, "users", user.uid);
         await setDoc(docRef, {
-            address: address
+            address: address,
+            role: permissions
         })
         await updateProfile(user, {
             displayName: displayName,
