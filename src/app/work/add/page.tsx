@@ -1,27 +1,45 @@
 'use client'
-import {addDoc, collection, doc, setDoc} from "@firebase/firestore";
-import {db} from "@/lib/firebase";
+import {addDoc, arrayUnion, collection, doc, setDoc} from "@firebase/firestore";
+import {app, db} from "@/lib/firebase";
 import {withAdmin} from "@/lib/auths";
-
+import {getAuth, User} from "@firebase/auth";
+import React, {useEffect, useState} from "react";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function AddWork() {
+    const auth = getAuth(app)
+    const [user, setUser] = useState<User | null>(null)
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setUser(user)
+        })
+
+        return () => unsubscribe()
+    }, [])
+
 
     // @ts-ignore
     const handleSubmit = async (event) => {
-        event.preventDefault()
-        let form_data = event.target
-        const doc_ref = await addDoc(
-            collection(db, 'work_brief'), {
+            event.preventDefault()
+            let form_data = event.target
+        toast.success(form_data.name.value + "가 등록 되었습니다")
+
+        if (user != null) {
+            const doc_ref = await addDoc(
+                collection(db, 'work_brief'), {
+                    name: form_data.name.value,
+                    description: form_data.description_brief.value,
+                })
+
+            await setDoc(doc(db, 'work_detail', doc_ref.id), {
                 name: form_data.name.value,
-                description: form_data.description.value,
-            })
-
-        await setDoc(doc(db, 'work_detail', doc_ref.id), {
-            name: form_data.name.value,
-            description: form_data.description.value,
-        })
-
-        console.log('Document written with ID: ', doc_ref.id)
+                description: form_data.description_detail.value,
+                employer: {[user.uid]: user.displayName},
+        });
+            console.log('Document written with ID: ', doc_ref.id)
+        }
     }
 
     return (
@@ -67,7 +85,7 @@ function AddWork() {
                         <div className="mr-1 w-2/5">
                             <input
                                 className="shadow appearance-none border rounded w-full py-2 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="adv_date_to" type="datetime-local" name="adv_date_from" required/>
+                                id="adv_date_to" type="datetime-local" name="adv_date_from"/>
                         </div>
                         <div className="mr-1 text-black font-bold text-center w-1/5">
                             <h4> ~ </h4>
@@ -75,7 +93,7 @@ function AddWork() {
                         <div className="w-2/5">
                             <input
                                 className="shadow appearance-none border rounded w-full py-2 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="adv_date_from" type="datetime-local" name="adv_date_to" required/>
+                                id="adv_date_from" type="datetime-local" name="adv_date_to"/>
                         </div>
                     </div>
                 </div>
@@ -87,6 +105,8 @@ function AddWork() {
                     </button>
                 </div>
             </form>
+                        <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false} newestOnTop={false}
+                            closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
         </div>
     );
 }

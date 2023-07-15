@@ -20,13 +20,15 @@ firebase emulators:export ./firestore
 ## Working
 
 ## TODO
+- change alert to toastify
+- migrate frontend features (direct db handling) to cloud functions
+- add firestore rules
 
 #### User
 - add kakao signin/signup
 
 #### Work
 - fix work detail page (detailed work description, deleting and editing work)
-- add enrollment of work (only admin could see)
 
 ## Done
 - HOC to protect pages from [un]authenticated users
@@ -37,3 +39,4 @@ firebase emulators:export ./firestore
 - add user delete in profile page
 - add user privilege (admin, employee, etc...)
 - add google signup and smooth signin/signup
+- add enrollment of work (only admin could see)
