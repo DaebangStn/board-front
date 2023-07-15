@@ -151,5 +151,9 @@ async function fetchUserRole(user: User) {
     }
 }
 
+function getUserDisplay(user: User): string {
+    return user?.displayName ?? user?.email ?? "Unknown User"
+}
 
-export {withAuth, withOutAuth, fetchUserRole, withAdmin};
+
+export {withAuth, withOutAuth, fetchUserRole, withAdmin, getUserDisplay};

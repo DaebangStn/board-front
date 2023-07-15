@@ -5,7 +5,7 @@ import {useRouter} from "next/navigation";
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
 import {doc, setDoc} from "@firebase/firestore";
-import {fetchUserRole} from "@/lib/auths";
+import {fetchUserRole, getUserDisplay} from "@/lib/auths";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,12 +18,11 @@ export default function Navbar() {
     console.log('navbar loaded')
 
     useEffect(() => {
-        const sub = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             setUser(user);
             if (user) {
                 fetchUserRole(user).then((_role) => {
-                    if (_role == null) {
-                    } else {
+                    if (_role != null) {
                         console.log('user role: ', _role)
                         setRole(_role)
                     }
@@ -45,7 +44,10 @@ export default function Navbar() {
             } else {
                 setRole(null)
             }
+
         })
+
+        return () => unsubscribe()
     }, [])
 
     const signOut = () => {
@@ -59,7 +61,7 @@ export default function Navbar() {
 
         setRole(null)
         setUser(null)
-        router.push('/')
+        router.refresh()
     }
 
     return (
@@ -72,7 +74,7 @@ export default function Navbar() {
                 {user != null && <button onClick={signOut}>로그아웃</button>}
                 {role == 'admin' && <Link href={`/work/add`}>일 추가</Link>}
                 {user != null && <div className="px-10">
-                    {user.displayName ? <p>{user.displayName}님 안녕하세요!</p> : <p>{user.email}님 안녕하세요!</p>}
+                    <p>{getUserDisplay(user)}님 안녕하세요!</p>
                 </div>}
             </div>
             <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false} newestOnTop={false}

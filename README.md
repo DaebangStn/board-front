@@ -40,3 +40,4 @@ firebase emulators:export ./firestore
 - add user privilege (admin, employee, etc...)
 - add google signup and smooth signin/signup
 - add enrollment of work (only admin could see)
+- abstraction of how users are displayed

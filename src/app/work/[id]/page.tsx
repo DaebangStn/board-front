@@ -5,7 +5,7 @@ import React, {useEffect, useState} from "react";
 import {toast, ToastContainer} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {getAuth, User} from "@firebase/auth";
-import {fetchUserRole} from "@/lib/auths";
+import {fetchUserRole, getUserDisplay} from "@/lib/auths";
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function DetailedWork({params}: { params: { id: string } }) {
@@ -66,7 +66,7 @@ export default function DetailedWork({params}: { params: { id: string } }) {
         if (docData == null) {
             toast.warn("오류가 발생했습니다")
         } else if (docData.employeeApplicant == null) {
-            docData.employeeApplicant = {[user.uid]: user.displayName}
+            docData.employeeApplicant = {[user.uid]: getUserDisplay(user)}
             setDoc(doc(db, "work_detail", params.id), docData).then(() => {
                 toast.success("지원 완료")
                 setIsApplicant(true)
@@ -74,7 +74,7 @@ export default function DetailedWork({params}: { params: { id: string } }) {
                 toast.error("지원 실패: " + error.message)
             })
         } else if (!docData.employeeApplicant.hasOwnProperty(user.uid)) {
-            docData.employeeApplicant[user.uid] = user.displayName
+            docData.employeeApplicant[user.uid] = getUserDisplay(user)
             setDoc(doc(db, "work_detail", params.id), docData).then(() => {
                 toast.success("지원 완료")
                 setIsApplicant(true)
