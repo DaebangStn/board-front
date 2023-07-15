@@ -1,11 +1,10 @@
 'use client'
 import {getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "@firebase/auth";
 import {useRouter} from "next/navigation";
-import {app, db} from "@/lib/firebase";
+import {app} from "@/lib/firebase";
 import {withOutAuth} from "@/lib/auths";
 import React, {useState} from "react";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 function SignIn() {
     const auth = getAuth(app)

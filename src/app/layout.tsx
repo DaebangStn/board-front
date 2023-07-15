@@ -3,6 +3,8 @@ import {Inter} from 'next/font/google'
 import Head from 'next/head';
 import Navbar from "@/app/navbar";
 import {Metadata} from "next";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const inter = Inter({subsets: ['latin']})
 

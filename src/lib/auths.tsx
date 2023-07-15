@@ -148,6 +148,8 @@ async function fetchUserRole(user: User) {
         } else {
             throw new Error("No document for user: " + user?.uid)
         }
+    }else{
+        console.log("user object is null")
     }
 }
 

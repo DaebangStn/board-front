@@ -7,7 +7,6 @@ import React, {useEffect, useState} from "react";
 import {doc, setDoc} from "@firebase/firestore";
 import {fetchUserRole, getUserDisplay} from "@/lib/auths";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function Navbar() {
     const [user, setUser] = useState<User | null>(null)

@@ -1,12 +1,12 @@
 'use client'
 import {deleteDoc, doc, DocumentData, getDoc, setDoc} from "@firebase/firestore";
-import {app, db} from "@/lib/firebase";
+import {app, db, functions} from "@/lib/firebase";
 import React, {useEffect, useState} from "react";
 import {toast, ToastContainer} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {getAuth, User} from "@firebase/auth";
-import {fetchUserRole, getUserDisplay} from "@/lib/auths";
-import 'react-toastify/dist/ReactToastify.css';
+import {fetchUserRole} from "@/lib/auths";
+import {httpsCallable} from "@firebase/functions";
 
 export default function DetailedWork({params}: { params: { id: string } }) {
     const auth = getAuth(app)
@@ -58,56 +58,26 @@ export default function DetailedWork({params}: { params: { id: string } }) {
     }, [params.id, user])
 
     const handleEnroll = () => {
-        if (user == null) {
-            toast.warn("로그인이 필요합니다")
-            return
-        }
+        const applyWork = httpsCallable(functions, 'applyWork')
 
-        if (docData == null) {
-            toast.warn("오류가 발생했습니다")
-        } else if (docData.employeeApplicant == null) {
-            docData.employeeApplicant = {[user.uid]: getUserDisplay(user)}
-            setDoc(doc(db, "work_detail", params.id), docData).then(() => {
-                toast.success("지원 완료")
-                setIsApplicant(true)
-            }).catch((error) => {
-                toast.error("지원 실패: " + error.message)
-            })
-        } else if (!docData.employeeApplicant.hasOwnProperty(user.uid)) {
-            docData.employeeApplicant[user.uid] = getUserDisplay(user)
-            setDoc(doc(db, "work_detail", params.id), docData).then(() => {
-                toast.success("지원 완료")
-                setIsApplicant(true)
-            }).catch((error) => {
-                toast.error("지원 실패: " + error.message)
-            })
-        } else {
-            toast.warn("이미 지원하였습니다")
-        }
+        applyWork({docId: params.id}).then((resp) => {
+            toast.info("지원 성공")
+            setIsApplicant(true)
+        }).catch((error) => {
+            toast.error("지원 실패" + error.message)
+        })
     }
 
     const cancelEnroll = () => {
-        if (user == null) {
-            toast.warn("로그인이 필요합니다")
-            return
-        }
-        if (docData == null) {
-            toast.warn("오류가 발생했습니다")
-        } else if (docData.employeeApplicant == null) {
-            toast.warn("지원하지 않은 일입니다")
+        const quitWork = httpsCallable(functions, 'quitWork')
+
+        quitWork({docId: params.id}).then((resp) => {
+            toast.info("지원 취소 완료.")
             setIsApplicant(false)
-        } else if (!docData.employeeApplicant.hasOwnProperty(user.uid)) {
-            toast.warn("지원하지 않은 일입니다")
-            setIsApplicant(false)
-        } else {
-            delete docData.employeeApplicant[user.uid];
-            setDoc(doc(db, "work_detail", params.id), docData).then(() => {
-                toast.success("지원 취소 완료")
-                setIsApplicant(false)
-            }).catch((error) => {
-                toast.error("지원 취소 실패: " + error.message)
-            })
-        }
+        }).catch((error) => {
+            toast.error("지원 취소 실패" + error.message)
+        })
+
     }
 
     const handleDelete = () => {
