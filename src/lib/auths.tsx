@@ -42,7 +42,7 @@ function withAuth(Component) {
         if (loading) {
             return <div>Loading...</div>;
         } else if (!authenticated) {
-            return <div>Error</div>;
+            return <div></div>;
         } else {
             return <Component {...props} />;
         }
@@ -77,16 +77,15 @@ function withOutAuth(Component) {
 
         useEffect(() => {
             if (!loading && authenticated) {
-                toast.error("로그아웃 해주세요")
                 router.push('/')
             }
-        }, [loading])
+        }, [authenticated])
 
 
         if (loading) {
             return <div>Loading...</div>;
         } else if (authenticated) {
-            return <div>Error</div>;
+            return <div></div>;
         } else {
             return <Component {...props} />;
         }
@@ -143,7 +142,7 @@ function withAdmin(Component) {
         if (loading) {
             return <div>Loading...</div>;
         } else if (!authenticated) {
-            return <div>Error</div>;
+            return <div></div>;
         } else {
             return <Component {...props} />;
         }

@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import {doc, getDoc, setDoc} from "@firebase/firestore";
 import {useRouter} from "next/navigation";
 import {toast} from "react-toastify";
+import {Linking} from "@/app/profile/linking";
 
 function Profile() {
     const auth = getAuth(app)
@@ -130,6 +131,7 @@ function Profile() {
                     계정삭제
                 </button>
             </div>
+            <Linking/>
         </div>
     )
 }

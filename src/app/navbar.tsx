@@ -65,8 +65,7 @@ export default function Navbar() {
         <div className="flex flex-row w-full py-5">
             <div className="flex flex-row items-center space-x-5 px-5">
                 <Link href={'/'} className="text-3xl">Hey, MR. KIM!</Link>
-                {user == null && <Link href={`/signin`}>로그인</Link>}
-                {user == null && <Link href={`/signup`}>회원가입</Link>}
+                {user == null && <Link href={`/signin`}>시작하기</Link>}
                 {user != null && <Link href={`/profile`}>마이페이지</Link>}
                 {user != null && <button onClick={signOut}>로그아웃</button>}
                 {role == 'admin' && <Link href={`/work/add`}>일 추가</Link>}

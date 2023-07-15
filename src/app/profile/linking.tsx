@@ -55,17 +55,18 @@ function Linking() {
     }
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col py-8">
+            <div>소셜 로그인 연결</div>
             {!isEmailLinked && (
                 <div>
-                    <form className="space-y-4 px-8">
-                        <div className="flex flex-row space-x-4">
+                    <form className="space-y-4 mr-8">
+                        <div className="flex flex-row mr-4">
                             <label>이메일:</label>
                             <input type="email" name="email" value={email} className="mt-1"
                                    onChange={e => setEmail(e.target.value)}
                             />
                         </div>
-                        <div className="flex flex-row space-x-4">
+                        <div className="flex flex-row mr-4">
                             <label>비밀번호:</label>
                             <input type="password" name="password" value={password} className="mt-1"
                                    onChange={e => setPassword(e.target.value)}
@@ -74,7 +75,7 @@ function Linking() {
                     </form>
                 </div>
             )}
-            <div className="flex min-h-screen flex-row p-8">
+            <div className="flex min-h-screen flex-row py-8">
                 <div className="mr-5">
                     <button
                         className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none
@@ -96,5 +97,4 @@ function Linking() {
     );
 }
 
-const ProtectedLinking = withAuth(Linking)
-export default ProtectedLinking
+export {Linking}
