@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation";
 import {app} from "@/lib/firebase";
 import {useEffect, useState} from "react";
 import {withAuth} from "@/lib/auths";
+import {toast} from "react-toastify";
 
 function Linking() {
     const router = useRouter()
@@ -30,10 +31,10 @@ function Linking() {
         if (!isGoogleLinked) {
             linkWithPopup(user, new GoogleAuthProvider()).then((result) => {
                 const user = result.user
-                alert("구글 계정 연결 완료: " + user.email)
+                toast.info("구글 계정 연결 완료: " + user.email)
                 router.refresh()
             }).catch((error) => {
-                alert("구글 계정 연결 실패: " + error.message)
+                toast.error("구글 계정 연결 실패: " + error.message)
                 router.refresh()
             });
         }
@@ -44,10 +45,10 @@ function Linking() {
             const credential = EmailAuthProvider.credential(email, password);
             linkWithPopup(user, credential).then((result) => {
                 const user = result.user
-                alert("이메일 연결 완료: " + user.email)
+                toast.info("이메일 연결 완료: " + user.email)
                 router.refresh()
             }).catch((error) => {
-                alert("이메일 연결 실패: " + error.message)
+                toast.error("이메일 연결 실패: " + error.message)
                 router.refresh()
             })
         }

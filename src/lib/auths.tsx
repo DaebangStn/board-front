@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation";
 import {doc, getDoc} from "@firebase/firestore";
 import {db} from "@/lib/firebase";
 import {User} from "@firebase/auth";
+import {toast} from "react-toastify";
 
 // @ts-ignore
 function withAuth(Component) {
@@ -31,17 +32,20 @@ function withAuth(Component) {
 
         }, []);  // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
-        if (!loading && !authenticated) {
-            // alert("로그인 해주세요")
-            router.push('/signin')
-            return
-        }
+        useEffect(() => {
+            if (!loading && !authenticated) {
+                toast.error("로그인 해주세요")
+                router.push('/signin')
+            }
+        }, [loading])
 
         if (loading) {
             return <div>Loading...</div>;
+        } else if (!authenticated) {
+            return <div>Error</div>;
+        } else {
+            return <Component {...props} />;
         }
-
-        return <Component {...props} />;
     }
 }
 
@@ -71,17 +75,21 @@ function withOutAuth(Component) {
 
         }, []);  // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
-        if (!loading && authenticated) {
-            // alert("로그아웃 해주세요")
-            router.push('/')
-            return
-        }
+        useEffect(() => {
+            if (!loading && authenticated) {
+                toast.error("로그아웃 해주세요")
+                router.push('/')
+            }
+        }, [loading])
+
 
         if (loading) {
             return <div>Loading...</div>;
+        } else if (authenticated) {
+            return <div>Error</div>;
+        } else {
+            return <Component {...props} />;
         }
-
-        return <Component {...props} />;
     }
 }
 
@@ -125,17 +133,20 @@ function withAdmin(Component) {
 
         }, []);  // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
-        if (!loading && !authenticated) {
-            alert("관리자 권한이 필요합니다")
-            router.push('/');  // Replace with your login route
-            return
-        }
+        useEffect(() => {
+            if (!loading && !authenticated) {
+                toast.error("관리자 권한이 필요합니다")
+                router.push('/');  // Replace with your login route
+            }
+        }, [loading])
 
         if (loading) {
             return <div>Loading...</div>;
+        } else if (!authenticated) {
+            return <div>Error</div>;
+        } else {
+            return <Component {...props} />;
         }
-
-        return <Component {...props} />;
     }
 }
 
@@ -148,7 +159,7 @@ async function fetchUserRole(user: User) {
         } else {
             throw new Error("No document for user: " + user?.uid)
         }
-    }else{
+    } else {
         console.log("user object is null")
     }
 }

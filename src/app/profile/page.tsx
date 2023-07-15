@@ -5,6 +5,7 @@ import {app, db} from "@/lib/firebase";
 import {useEffect, useState} from "react";
 import {doc, getDoc, setDoc} from "@firebase/firestore";
 import {useRouter} from "next/navigation";
+import {toast} from "react-toastify";
 
 function Profile() {
     const auth = getAuth(app)
@@ -55,12 +56,12 @@ function Profile() {
         }).then(() => {
 
         }).catch((error) => {
-            alert("프로필 저장 실패: " + error.message)
+            toast.error("프로필 저장 실패: " + error.message)
         })
 
         await updateEmail(user, email).then(() => {
         }).catch((error) => {
-            alert("이메일 저장 실패: " + error.message)
+            toast.error("이메일 저장 실패: " + error.message)
         })
 
         // TODO: Let's isolate the phone number change logic
@@ -70,18 +71,18 @@ function Profile() {
         // const credential = PhoneAuthProvider.credential(verificationId, '123456')
         // await updatePhoneNumber(user, credential).then(() => {
         // }).catch((error) => {
-        //     alert("전화번호 저장 실패: " + error.message)
+        //     toast.error("전화번호 저장 실패: " + error.message)
         // })
 
-        alert("저장 완료")
+        toast.info("저장 완료")
         await router.push('/')
     }
 
     const handleUserDelete = async () => {
         user.delete().then(() => {
-            alert("사용자 삭제 완료")
+            toast.info("사용자 삭제 완료")
         }).catch((error) => {
-            alert("사용자 삭제 실패: " + error.message)
+            toast.error("사용자 삭제 실패: " + error.message)
         })
         router.refresh()
     }

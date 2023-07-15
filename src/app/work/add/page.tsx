@@ -4,8 +4,7 @@ import {app, db} from "@/lib/firebase";
 import {withAdmin} from "@/lib/auths";
 import {getAuth, User} from "@firebase/auth";
 import React, {useEffect, useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from "react-toastify";
 
 function AddWork() {
     const auth = getAuth(app)
@@ -105,8 +104,6 @@ function AddWork() {
                     </button>
                 </div>
             </form>
-                        <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false} newestOnTop={false}
-                            closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
         </div>
     );
 }

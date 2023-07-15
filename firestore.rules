@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+    match /databases/{database}/documents {
+
+        // TODO: write rule for user db
+         match /users/{userId} {
+         allow read, write: if true;
+         }
+
+        function hasUpDelPermission(workId) {
+            return request.auth.uid != null &&
+                    (get(/databases/$(database)/documents/users/$(request.auth.uid)).role == 'admin' ||
+                            request.auth.uid in get(/databases/$(database)/documents/work_detail/$(workId)).employer);
+        }
+
+        function hasCreatePermission() {
+            return request.auth.uid != null &&
+                    (get(/databases/$(database)/documents/users/$(request.auth.uid)).role == 'admin' ||
+                            get(/databases/$(database)/documents/users/$(request.auth.uid)).role == 'employer');
+        }
+
+        match /work_brief/{workId} {
+            allow read: if true;
+            allow create: if hasCreatePermission();
+            allow update, delete: if hasUpDelPermission(workId);
+        }
+
+        match /work_detail/{workId} {
+            allow read: if true;
+            allow create: if hasCreatePermission();
+            allow update, delete: if hasUpDelPermission(workId);
+        }
+    }
+}

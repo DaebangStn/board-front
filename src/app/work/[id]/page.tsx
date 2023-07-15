@@ -2,7 +2,7 @@
 import {deleteDoc, doc, DocumentData, getDoc, setDoc} from "@firebase/firestore";
 import {app, db, functions} from "@/lib/firebase";
 import React, {useEffect, useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {getAuth, User} from "@firebase/auth";
 import {fetchUserRole} from "@/lib/auths";
@@ -145,8 +145,5 @@ export default function DetailedWork({params}: { params: { id: string } }) {
                             </div>}
                     </div>}
                 </div>}
-            <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
         </div>)
 }

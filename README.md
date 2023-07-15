@@ -20,9 +20,6 @@ firebase emulators:export ./firestore
 ## Working
 
 ## TODO
-- change alert to toastify
-- migrate frontend features (direct db handling) to cloud functions
-- add firestore rules
 
 #### User
 - add kakao signin/signup
@@ -41,3 +38,6 @@ firebase emulators:export ./firestore
 - add google signup and smooth signin/signup
 - add enrollment of work (only admin could see)
 - abstraction of how users are displayed
+- migrate frontend features (direct db handling) to cloud functions
+- add firestore rules
+- change alert to toastify

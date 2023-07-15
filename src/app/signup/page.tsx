@@ -5,8 +5,7 @@ import {app, db} from "@/lib/firebase";
 import {withOutAuth} from "@/lib/auths";
 import {doc, setDoc} from "@firebase/firestore";
 import React, {useEffect, useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from "react-toastify";
 
 
 function SignUp() {
@@ -29,7 +28,7 @@ function SignUp() {
         const password_confirm = form_data.password_check.value
 
         if (password !== password_confirm) {
-            alert("비밀번호가 일치하지 않습니다.")
+            toast.error("비밀번호가 일치하지 않습니다.")
             return
         }
 
@@ -43,7 +42,7 @@ function SignUp() {
                     role: 'employee'
                 }).then(() => {
                 }).catch((error) => {
-                    alert("회원가입 실패: " + error.message)
+                    toast.error("회원가입 실패: " + error.message)
                     router.refresh()
                 })
 
@@ -52,12 +51,12 @@ function SignUp() {
                     photoURL: null
                 }).then(() => {
                 }).catch((error) => {
-                    alert("회원가입 실패: " + error.message)
+                    toast.error("회원가입 실패: " + error.message)
                 })
 
                 router.push('/signup/linking')
             }).catch((error) => {
-            alert("회원가입 실패: " + error.message)
+            toast.error("회원가입 실패: " + error.message)
         })
     }
 
@@ -128,8 +127,6 @@ function SignUp() {
                     </div>
                 </form>
             </div>
-            <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false} newestOnTop={false}
-                            closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
         </div>
     );
 }

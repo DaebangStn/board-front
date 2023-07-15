@@ -4,7 +4,7 @@ import {useRouter} from "next/navigation";
 import {app} from "@/lib/firebase";
 import {withOutAuth} from "@/lib/auths";
 import React, {useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 function SignIn() {
     const auth = getAuth(app)
@@ -97,8 +97,6 @@ function SignIn() {
                     </div>
                 </div>
             </div>
-            <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false} newestOnTop={false}
-                            closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
         </div>
     );
 }

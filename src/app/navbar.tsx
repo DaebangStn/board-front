@@ -6,15 +6,13 @@ import Link from "next/link";
 import React, {useEffect, useState} from "react";
 import {doc, setDoc} from "@firebase/firestore";
 import {fetchUserRole, getUserDisplay} from "@/lib/auths";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 export default function Navbar() {
     const [user, setUser] = useState<User | null>(null)
     const [role, setRole] = useState<string | null>(null)
     const auth = getAuth(app)
     const router = useRouter()
-
-    console.log('navbar loaded')
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -76,8 +74,6 @@ export default function Navbar() {
                     <p>{getUserDisplay(user)}님 안녕하세요!</p>
                 </div>}
             </div>
-            <ToastContainer position="top-right" autoClose={2500} hideProgressBar={false} newestOnTop={false}
-                            closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
         </div>
     );
 
