@@ -58,7 +58,7 @@ export default function DetailedWork({params}: { params: { id: string } }) {
     }, [params.id, user])
 
     const handleEnroll = () => {
-        const applyWork = httpsCallable(functions, 'applyWork')
+        const applyWork = httpsCallable(functions, 'applywork')
 
         applyWork({docId: params.id}).then((resp) => {
             toast.info("지원 성공")
@@ -69,7 +69,7 @@ export default function DetailedWork({params}: { params: { id: string } }) {
     }
 
     const cancelEnroll = () => {
-        const quitWork = httpsCallable(functions, 'quitWork')
+        const quitWork = httpsCallable(functions, 'quitwork')
 
         quitWork({docId: params.id}).then((resp) => {
             toast.info("지원 취소 완료.")
@@ -83,6 +83,7 @@ export default function DetailedWork({params}: { params: { id: string } }) {
     const handleDelete = () => {
         deleteDoc(doc(db, "work_brief", params.id)).then(() => {
             deleteDoc(doc(db, "work_detail", params.id)).then(() => {
+                toast("삭제하였습니다")
                 router.push('/')
             }).catch((error) => {
                 toast("삭제 실패: " + error.message)

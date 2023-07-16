@@ -18,6 +18,7 @@ firebase emulators:export ./firestore
 **REMEMBER:** Run this command before exiting emulator
 
 ## Working
+- hosting on aws nodejs server
 
 ## TODO
 
@@ -41,3 +42,4 @@ firebase emulators:export ./firestore
 - migrate frontend features (direct db handling) to cloud functions
 - add firestore rules
 - change alert to toastify
+- firebase deploy (hosting only supports static files so that aws is needed)

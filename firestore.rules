@@ -10,14 +10,14 @@ service cloud.firestore {
 
         function hasUpDelPermission(workId) {
             return request.auth.uid != null &&
-                    (get(/databases/$(database)/documents/users/$(request.auth.uid)).role == 'admin' ||
-                            request.auth.uid in get(/databases/$(database)/documents/work_detail/$(workId)).employer);
+                    (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+                            request.auth.uid in get(/databases/$(database)/documents/work_detail/$(workId)).data.employer);
         }
 
         function hasCreatePermission() {
             return request.auth.uid != null &&
-                    (get(/databases/$(database)/documents/users/$(request.auth.uid)).role == 'admin' ||
-                            get(/databases/$(database)/documents/users/$(request.auth.uid)).role == 'employer');
+                    (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+                            get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'employer');
         }
 
         match /work_brief/{workId} {

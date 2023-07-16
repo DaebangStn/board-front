@@ -20,10 +20,10 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore();
 // Point to the emulator running on localhost.
-connectFirestoreEmulator(db, "127.0.0.1", 8080);
+// connectFirestoreEmulator(db, "127.0.0.1", 8080);
 
 const functions = getFunctions(app);
-connectFunctionsEmulator(functions, "127.0.0.1", 5001);
+// connectFunctionsEmulator(functions, "127.0.0.1", 5001);
 
 // const auth = getAuth(app);
 // connectAuthEmulator(auth, "http://localhost:9099");

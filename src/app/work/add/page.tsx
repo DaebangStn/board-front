@@ -23,21 +23,22 @@ function AddWork() {
     const handleSubmit = async (event) => {
             event.preventDefault()
             let form_data = event.target
-        toast.success(form_data.name.value + "가 등록 되었습니다")
 
         if (user != null) {
             const doc_ref = await addDoc(
                 collection(db, 'work_brief'), {
                     name: form_data.name.value,
                     description: form_data.description_brief.value,
-                })
+                });
 
             await setDoc(doc(db, 'work_detail', doc_ref.id), {
                 name: form_data.name.value,
                 description: form_data.description_detail.value,
                 employer: {[user.uid]: user.displayName},
-        });
+                });
+
             console.log('Document written with ID: ', doc_ref.id)
+            toast.success(form_data.name.value + "가 등록 되었습니다")
         }
     }
 
