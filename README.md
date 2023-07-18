@@ -43,3 +43,4 @@ firebase emulators:export ./firestore
 - add firestore rules
 - change alert to toastify
 - firebase deploy (hosting only supports static files so that aws is needed)
+- ** google console option must be changed to allow access from anonymous **

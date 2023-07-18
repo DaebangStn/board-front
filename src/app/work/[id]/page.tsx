@@ -58,13 +58,14 @@ export default function DetailedWork({params}: { params: { id: string } }) {
     }, [params.id, user])
 
     const handleEnroll = () => {
-        const applyWork = httpsCallable(functions, 'applywork')
+        const applyWork = httpsCallable(functions, 'applywork', )
 
         applyWork({docId: params.id}).then((resp) => {
             toast.info("지원 성공")
             setIsApplicant(true)
         }).catch((error) => {
             toast.error("지원 실패" + error.message)
+            console.dir(error)
         })
     }
 
@@ -76,6 +77,7 @@ export default function DetailedWork({params}: { params: { id: string } }) {
             setIsApplicant(false)
         }).catch((error) => {
             toast.error("지원 취소 실패" + error.message)
+            console.dir(error)
         })
 
     }
@@ -109,7 +111,7 @@ export default function DetailedWork({params}: { params: { id: string } }) {
                         {user != null && ((docData.employer && docData.employer.hasOwnProperty(user.uid)) || role == 'admin') &&
                             <div className="space-y-4">
                                 <div><p className="text-bold">
-                                    지원자: {docData.employeeApplicant ? docData.employee.length : 0}명</p>
+                                    지원자: {docData.employeeApplicant ? Object.keys(docData.employeeApplicant).length : 0}명</p>
                                 </div>
                                 {docData.employeeApplicant &&
                                     <div className="text-xl">지원자 명단
